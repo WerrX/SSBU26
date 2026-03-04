@@ -1,0 +1,137 @@
+from PIL import Image
+
+import pandas as pd
+
+
+def print_hi(name):
+    print(f'Hi, {name}')
+
+def triedenieLudiPodlaVeku(ages):
+    dic = {
+        'minor': 0,
+        'adult': 0,
+        'senior' : 0
+    }
+
+    for age in ages:
+        if age < 18:
+            dic['minor'] += 1
+        elif age > 18 and age < 65:
+            dic['adult'] += 1
+        else:
+            dic['senior'] += 1
+    print(dic)
+    return dic
+
+def poslatlistveku():
+    ages = [10,25,36,85,125,1,35]
+    triedenieLudiPodlaVeku(ages)
+#--------------------Koniec Ulohy 1 ---------------------------------------
+
+#Úloha 2: Spracovanie súborov s údajmi o pacientoch
+def zapis_mena():
+    pacienti = [
+        ['jozo', 'bolest hlavy'],
+        ['adam', 'koleno'],
+        ['peter', 'chrípka'],
+        ['mária', 'bolest chrbta'],
+        ['jana', 'chrípka'],
+        ['tomáš', 'angína'],
+        ['lucia', 'bolest hlavy'],
+        ['martin', 'chrípka'],
+        ['zuzana', 'koleno'],
+        ['richard', 'angína'],
+        ['katarína', 'bolest chrbta'],
+        ['miroslav', 'chrípka'],
+        ['veronika', 'bolest hlavy'],
+        ['stanislav', 'koleno'],
+        ['elena', 'angína'],
+        ['michal', 'chrípka'],
+        ['andrea', 'bolest chrbta'],
+        ['rastislav', 'bolest hlavy'],
+        ['silvia', 'chrípka'],
+        ['vladimír', 'angína'],
+        ['daniela', 'koleno'],
+        ['patrik', 'chrípka'],
+        ['monika', 'bolest chrbta'],
+        ['róbert', 'bolest hlavy'],
+        ['ivana', 'angína'],
+        ['marek', 'chrípka'],
+        ['barbora', 'koleno'],
+        ['juraj', 'bolest chrbta'],
+        ['natália', 'chrípka'],
+        ['milan', 'angína'],
+        ['denisa', 'bolest hlavy'],
+        ['igor', 'chrípka'],
+        ['kristína', 'koleno'],
+        ['dušan', 'bolest chrbta'],
+        ['renáta', 'angína'],
+        ['branislav', 'chrípka'],
+        ['soňa', 'bolest hlavy'],
+        ['tibor', 'koleno'],
+        ['alžbeta', 'chrípka'],
+        ['norbert', 'angína'],
+        ['dagmar', 'bolest chrbta'],
+        ['ľuboš', 'chrípka'],
+        ['tatiana', 'bolest hlavy'],
+        ['ondrej', 'angína'],
+        ['petra', 'koleno'],
+        ['radoslav', 'chrípka'],
+        ['ľubica', 'bolest chrbta'],
+        ['štefan', 'bolest hlavy'],
+        ['marta', 'angína'],
+        ['filip', 'chrípka'],
+    ]
+
+    with open("data/patients.csv", "w+", encoding='utf-8') as file:
+        file.write("patient_name, diagnosis\n")
+        for meno, diagnoza in pacienti:
+            file.write("{}, {}\n".format(meno, diagnoza))
+
+#Úloha 3: Načítanie údajov do štruktúry DataFrame a ich vizualizácia
+def zmena_suboru():
+    df = pd.read_csv("data/patients.csv", encoding='utf-8')
+    df.columns = ["patient_name", "diagnosis"]
+    df['ID'] = range(len(df))
+    print(df['diagnosis'].value_counts())
+
+
+#Úloha 4: Práca s obrazom
+def obrazok():
+    img = Image.open("data/microscope.jpg")
+    cropped = img.crop((300, 550, 1000, 1250))
+    resized = cropped.resize((800, 600))
+    resized.show()
+
+#Úloha 5: Vytvorenie triedy a analýza pacientov
+class PacientData:
+    def __init__(self, path):
+        self.df = pd.read_csv(path, encoding='utf-8')
+
+    def count_diagnoses(self):
+        self.df.columns = ["patient_name", "diagnosis"]
+        print(self.df['diagnosis'].value_counts())
+
+    def get_most_common_diagnosis(self, n):
+        print(self.df['diagnosis'].value_counts().head(n))
+        #print(self.df['diagnosis'].value_counts().sort_values(ascending=False).head(n))
+
+    def display_summary(self):
+        print(self.df.describe())
+
+
+
+if __name__ == '__main__':
+        # uloha 1
+    poslatlistveku()
+        # uloha 2
+    zapis_mena()
+        # uloha 3
+    #zmena_suboru()
+        # uloha 4
+    obrazok()
+        # uloha 5
+    pacient = PacientData("data/patients.csv")
+    pacient.count_diagnoses()
+    pacient.get_most_common_diagnosis(2)
+    pacient.display_summary()
